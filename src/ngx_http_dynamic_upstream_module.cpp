@@ -225,7 +225,10 @@ file_open(ngx_str_t *filename, int create, int mode)
     file.offset = 0;
  
     file.fd = ngx_open_file(file.name.data, mode,
-                            create, NGX_FILE_DEFAULT_ACCESS);
+                            create, NGX_FILE_OWNER_ACCESS);
+
+    if (file.fd != NGX_INVALID_FILE)
+        chmod((char *) file.name.data, S_IRUSR | S_IWUSR);
 
     return file;
 }
@@ -827,12 +830,14 @@ ngx_http_dynamic_upstream_save(S *uscf, ngx_str_t filename,
     file.log = ngx_cycle->log;
  
     file.fd = ngx_open_file(filename.data, NGX_FILE_WRONLY,
-                            NGX_FILE_TRUNCATE, NGX_FILE_DEFAULT_ACCESS);
+                            NGX_FILE_TRUNCATE, NGX_FILE_OWNER_ACCESS);
     if (file.fd == NGX_INVALID_FILE) {
         ngx_log_error(NGX_LOG_ERR, ngx_cycle->log, ngx_errno,
                       ngx_open_file_n " \"%V\" failed", &filename);
         return;
     }
+
+    chmod((char *) file.name.data, S_IRUSR | S_IWUSR);
 
     server = (ngx_str_t *) servers->elts;
 
