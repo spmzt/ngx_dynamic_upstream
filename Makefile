@@ -1,9 +1,15 @@
+<<<<<<< HEAD
 NGINX_VERSION=1.11.0
+=======
+.PHONY: build
+>>>>>>> eec8937 (Simplify it build by freebsd-ports)
 
-check: tmp/$(NGINX_VERSION)/nginx-$(NGINX_VERSION)/objs/nginx install-perl-lib
-	PERL5LIB=tmp/perl/lib/perl5/ TEST_NGINX_BINARY=tmp/nginx/$(NGINX_VERSION)/nginx-$(NGINX_VERSION)/objs/nginx \
-	tmp/perl/bin/prove -v --shuffle --timer t/*.t
+build:
+	@cp FreeBSD/Makefile /usr/ports/www/openresty/
+	@make -C /usr/ports/www/openresty/ install-missing-packages
+	@make -C /usr/ports/www/openresty/
 
+<<<<<<< HEAD
 build: tmp/$(NGINX_VERSION)/nginx-$(NGINX_VERSION)/objs/nginx
 
 tmp/$(NGINX_VERSION)/nginx-$(NGINX_VERSION)/objs/nginx : src/*.c nginx-build nginx-build.ini
@@ -27,3 +33,5 @@ install-perl-lib: cpanm
 	./cpanm -l tmp/perl Test::Nginx
 
 .PHONY: build check clean nginx-build install-perl-lib
+=======
+>>>>>>> eec8937 (Simplify it build by freebsd-ports)
